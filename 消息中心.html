@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工作台 · 消息通知中心</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;
+  --bg2:#f7f7f5;
+  --bg3:#f0efe9;
+  --t1:#1a1a18;
+  --t2:#5a5a56;
+  --t3:#9a9a94;
+  --bd:rgba(0,0,0,0.09);
+  --bd2:rgba(0,0,0,0.15);
+  --blue:#185FA5;
+  --blue-bg:#E6F1FB;
+  --blue-t:#0C447C;
+  --red:#E24B4A;
+  --red-bg:#FCEBEB;
+  --red-t:#A32D2D;
+  --orange:#EF9F27;
+  --orange-bg:#FAEEDA;
+  --orange-t:#854F0B;
+  --green:#1D9E75;
+  --green-bg:#E1F5EE;
+  --green-t:#0F6E56;
+  --purple:#7F77DD;
+  --purple-bg:#EEEDFE;
+  --purple-t:#534AB7;
+  --r4:4px;--r6:6px;--r8:8px;
+}
+body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#fff;height:100vh;overflow:hidden}
+.layout{display:flex;height:100vh;overflow:hidden}
+
+/* 左侧 */
+.sidebar{width:180px;border-right:1px solid var(--bd);display:flex;flex-direction:column;padding:20px 0 0;background:#fff;flex-shrink:0}
+.sec-title{font-size:12px;font-weight:600;color:var(--t1);padding:0 16px 10px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:7px 16px;cursor:pointer;font-size:13px;color:var(--t2);position:relative;transition:color 0.12s}
+.nav-item:hover{color:var(--t1)}
+.nav-item.active{color:var(--t1);font-weight:600}
+.dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.dot-gray{background:#888780}
+.dot-coral{background:#D85A30}
+.dot-amber{background:#EF9F27}
+.dot-green{background:#1D9E75}
+.dot-purple{background:#7F77DD}
+.dot-blue{background:#185FA5}
+.nav-count{margin-left:auto;font-size:11px;font-weight:600;min-width:16px;text-align:center}
+.nc-r{color:var(--red-t)}
+.nc-o{color:var(--orange-t)}
+.nc-b{color:var(--blue-t)}
+.nc-g{color:var(--t3)}
+.sidebar-gap{height:16px}
+.quick-title{font-size:12px;font-weight:600;color:var(--t1);padding:0 16px 8px}
+.quick-action{display:flex;align-items:center;gap:8px;padding:6px 16px;cursor:pointer;font-size:13px;color:var(--t2);transition:color 0.12s}
+.quick-action:hover{color:var(--t1)}
+
+/* 中间列表 */
+.content{flex:1;display:flex;flex-direction:column;overflow:hidden;border-right:1px solid var(--bd)}
+.toolbar{display:flex;align-items:center;padding:10px 16px;gap:8px;border-bottom:1px solid var(--bd);flex-shrink:0}
+.search{flex:1;height:32px;border:1px solid var(--bd2);border-radius:var(--r6);padding:0 12px;font-size:13px;color:var(--t1);background:var(--bg2);outline:none;font-family:inherit;min-width:0}
+.search::placeholder{color:var(--t3)}
+.search:focus{border-color:var(--blue);background:#fff}
+.filter-group{display:flex;gap:6px;flex-shrink:0}
+.fbtn{height:30px;padding:0 12px;border:1px solid var(--bd2);border-radius:var(--r6);font-size:12px;font-weight:500;background:#fff;color:var(--t2);cursor:pointer;font-family:inherit;white-space:nowrap;transition:all 0.12s}
+.fbtn:hover{border-color:var(--blue);color:var(--blue)}
+.fbtn.on{background:var(--blue-bg);border-color:rgba(24,95,165,0.35);color:var(--blue-t);font-weight:600}
+.list-area{flex:1;overflow-y:auto;padding:8px 10px}
+.list-area::-webkit-scrollbar{width:4px}
+.list-area::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+
+/* 消息卡片 */
+.card{display:flex;border-bottom:1px solid var(--bd);cursor:pointer;background:#fff;transition:background 0.1s;position:relative;padding:12px 10px 12px 0}
+.card:hover{background:#fafaf8}
+.card.active{background:var(--blue-bg)}
+.card.unread{background:#fafaf8}
+.pbar-wrap{width:28px;display:flex;justify-content:center;flex-shrink:0;padding-top:3px}
+.pbar{width:3px;height:calc(100% - 24px);border-radius:2px;position:absolute;left:16px;top:12px}
+.pb-h{background:var(--red)}.pb-m{background:var(--orange)}.pb-l{background:var(--blue)}
+.card-left{width:28px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;padding-top:2px;gap:6px}
+.type-icon{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.card-body{flex:1;min-width:0}
+.card-header{display:flex;align-items:flex-start;gap:6px;margin-bottom:4px}
+.card-title{font-size:13px;font-weight:600;color:var(--t1);flex:1;line-height:1.45}
+.card.active .card-title{color:var(--blue-t)}
+.pin-badge{font-size:10px;padding:1px 5px;border-radius:3px;font-weight:600;background:var(--red-bg);color:var(--red-t);flex-shrink:0;white-space:nowrap;margin-top:2px}
+.card-meta{display:flex;align-items:center;gap:6px;margin-bottom:4px}
+.src-tag{font-size:11px;color:var(--t3);background:var(--bg2);padding:1px 6px;border-radius:3px;border:1px solid var(--bd)}
+.card-right{width:80px;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:6px;padding-top:2px}
+.ctime{font-size:11px;color:var(--t3);white-space:nowrap}
+.udot{width:7px;height:7px;border-radius:50%;background:var(--blue)}
+.card-sum{font-size:12px;color:var(--t2);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:5px}
+.dtags{display:flex;gap:5px;flex-wrap:wrap}
+.dtag{font-size:11px;padding:1px 7px;border-radius:3px;font-weight:500}
+.dtag-r{background:var(--red-bg);color:var(--red-t)}
+.dtag-o{background:var(--orange-bg);color:var(--orange-t)}
+.dtag-b{background:var(--blue-bg);color:var(--blue-t)}
+.dtag-g{background:var(--green-bg);color:var(--green-t)}
+
+/* 底部统计 */
+.bottombar{height:36px;display:flex;align-items:center;padding:0 16px;border-top:1px solid var(--bd);flex-shrink:0;gap:16px}
+.stat{font-size:12px;color:var(--t2)}
+.stat b{font-weight:600;color:var(--t1)}
+.stat-r b{color:var(--red)}
+
+/* 右侧详情 */
+.detail{width:320px;flex-shrink:0;display:flex;flex-direction:column;overflow:hidden;background:#fff}
+.dp-scroll{flex:1;overflow-y:auto}
+.dp-scroll::-webkit-scrollbar{width:4px}
+.dp-scroll::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px}
+.dp-head{padding:16px 18px 14px;border-bottom:1px solid var(--bd)}
+.dp-title-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:10px}
+.dp-title{font-size:15px;font-weight:700;color:var(--t1);flex:1;line-height:1.4}
+.dp-badge{font-size:11px;padding:3px 9px;border-radius:4px;font-weight:600;white-space:nowrap;flex-shrink:0;margin-top:2px}
+.dp-meta{font-size:11.5px;color:var(--t3);line-height:1.8}
+.dp-src{font-size:11.5px;color:var(--blue);cursor:pointer}
+.dp-sec{padding:13px 18px;border-bottom:1px solid var(--bd)}
+.dp-label{font-size:10.5px;font-weight:700;color:var(--t3);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:7px}
+.dp-text{font-size:12.5px;color:var(--t2);line-height:1.65}
+.dp-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.dp-cell{background:var(--bg2);border-radius:var(--r6);padding:8px 10px;border:1px solid var(--bd)}
+.dp-clabel{font-size:10px;color:var(--t3);margin-bottom:3px;font-weight:500}
+.dp-cval{font-size:13px;font-weight:700;color:var(--t1)}
+.dp-advice{font-size:12px;color:var(--t2);line-height:1.65;background:var(--orange-bg);border-radius:var(--r6);padding:10px 12px;border-left:3px solid var(--orange)}
+.dp-actions{padding:14px 18px;display:flex;flex-direction:column;gap:7px}
+.abtn{width:100%;height:36px;border-radius:var(--r8);font-size:13px;cursor:pointer;font-weight:600;font-family:inherit;transition:all 0.15s;letter-spacing:0.02em}
+.abtn-p{background:var(--blue);color:#fff;border:none}
+.abtn-p:hover{background:var(--blue-t)}
+.abtn-s{background:#fff;color:var(--t2);border:1px solid var(--bd2)}
+.abtn-s:hover{background:var(--bg2)}
+.dp-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--t3);font-size:13px;gap:12px}
+.dp-empty-icon{font-size:32px;opacity:0.25}
+mark{background:var(--orange-bg);color:var(--orange-t);border-radius:2px;padding:0 1px}
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- 左侧 -->
+  <div class="sidebar">
+    <div class="sec-title">消息分类</div>
+    <div class="nav-item active" onclick="filterType('all',this)">
+      <span class="dot dot-gray"></span>全部消息
+      <span class="nav-count nc-r" id="nc-all">12</span>
+    </div>
+    <div class="nav-item" onclick="filterType('PUB',this)">
+      <span class="dot dot-coral"></span>舆情与品牌预警
+      <span class="nav-count nc-o">3</span>
+    </div>
+    <div class="nav-item" onclick="filterType('MKT',this)">
+      <span class="dot dot-amber"></span>竞对动态预警
+      <span class="nav-count nc-o">1</span>
+    </div>
+    <div class="nav-item" onclick="filterType('CUS',this)">
+      <span class="dot dot-green"></span>客诉信息提醒
+      <span class="nav-count nc-b">2</span>
+    </div>
+    <div class="nav-item" onclick="filterType('RD',this)">
+      <span class="dot dot-purple"></span>需求信息提醒
+      <span class="nav-count nc-b">2</span>
+    </div>
+    <div class="nav-item" onclick="filterType('STR',this)">
+      <span class="dot dot-blue"></span>战略与政策推送
+      <span class="nav-count nc-b">1</span>
+    </div>
+    <div class="sidebar-gap"></div>
+    <div class="quick-title">快速操作</div>
+    <div class="quick-action" onclick="markAllRead()">✓ &nbsp;全部标记已读</div>
+  </div>
+
+  <!-- 中间 -->
+  <div class="content">
+    <div class="toolbar">
+      <input class="search" placeholder="搜索消息..." id="searchInput" oninput="doSearch(this.value)"/>
+      <div class="filter-group">
+        <button class="fbtn on" id="fbtn-unread" onclick="toggleF('unread',this)">未读</button>
+        <button class="fbtn" id="fbtn-high" onclick="toggleF('high',this)">高优先级</button>
+        <button class="fbtn" id="fbtn-7d" onclick="toggleF('7d',this)">近7天</button>
+        <button class="fbtn" onclick="markAllRead()">批量已读</button>
+      </div>
+    </div>
+    <div class="list-area" id="listPanel"></div>
+    <div class="bottombar">
+      <div class="stat">总消息 <b id="totalCount">12</b></div>
+      <div class="stat stat-r">未读 <b id="unreadCount">6</b></div>
+      <div class="stat">今日新增 <b id="todayCount">8</b></div>
+    </div>
+  </div>
+
+  <!-- 右侧详情 -->
+  <div class="detail" id="detailPanel">
+    <div class="dp-empty">
+      <div class="dp-empty-icon">📋</div>
+      <div>点击消息查看详情</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const msgs=[
+  {id:1,type:'PAT',tn:'专利与侵权预警',p:'high',
+   title:'【高风险】配方专利侵权预警 — 聚乳酸改性配方',
+   sum:'系统检测到第三方企业提交的配方与本司专利CN2024-PBAT-037高度相似，相似度达82%，建议法务部立即介入核查。',
+   src:'研发创新 > 侵权风险防控',time:'10分钟前',exact:'2026-04-02 09:51',unread:true,pin:true,
+   tags:[{l:'相似度：82%',c:'r'},{l:'专利风险：高',c:'r'}],
+   det:{desc:'月度专利扫描发现深圳绿塑科技有限公司配方与本司已授权专利CN202410234X相似度82分，存在侵权风险。',
+     data:[{l:'命中专利号',v:'CN202410234X'},{l:'相似度',v:'82%'},{l:'侵权企业',v:'绿塑科技'},{l:'专利状态',v:'有效授权'}],
+     advice:'建议法务部在5个工作日内完成侵权核查，必要时发出警告函。'}},
+  {id:2,type:'PUB',tn:'舆情与品牌预警',p:'high',
+   title:'【高风险舆情】微博涉企降解材料质量争议扩散',
+   sum:'监测到微博平台涉及"蓝山屯河降解袋"质量投诉帖，2小时内获赞1200+，风险评分91，已进入热搜候选。',
+   src:'客情洞察 > 负面舆情检测',time:'32分钟前',exact:'2026-04-02 09:29',unread:true,pin:true,
+   tags:[{l:'风险评分：91',c:'r'},{l:'快速扩散',c:'r'}],
+   det:{desc:'客情监测引擎检测到微博用户@环保体验官发布长文，内容涉及PLA降解袋3个月未降解，配有图片及视频证据。',
+     data:[{l:'平台',v:'微博'},{l:'风险评分',v:'91分'},{l:'曝光量',v:'2.1万次'},{l:'情感倾向',v:'负面'}],
+     advice:'建议营销中心1小时内完成舆情核实，由公关专员起草官方回应，联系平台进行内容评估。'}},
+  {id:3,type:'MKT',tn:'竞对动态预警',p:'mid',
+   title:'竞对动态：绿川科技完成2.3亿元B轮融资',
+   sum:'竞对监测捕获绿川科技今日发布融资公告，B轮2.3亿元，投资方含国家绿色基金，计划新建年产能5万吨降解材料生产线。',
+   src:'竞对监测 > 竞对动态追踪',time:'1小时前',exact:'2026-04-02 09:00',unread:true,pin:false,
+   tags:[{l:'融资：2.3亿',c:'o'},{l:'竞争威胁：中',c:'o'}],
+   det:{desc:'绿川科技发布官方公告，完成2.3亿元B轮融资，由国家绿色产业发展基金领投，将用于扩大PBAT基材产能及新建技术研发中心。',
+     data:[{l:'竞对名称',v:'绿川科技'},{l:'融资轮次',v:'B轮'},{l:'金额',v:'2.3亿元'},{l:'新增产能',v:'5万吨/年'}],
+     advice:'建议战规部组织专项分析，评估对本司市场份额的潜在影响，并在本月战略例会中讨论。'}},
+  {id:4,type:'CUS',tn:'客诉信息提醒',p:'mid',
+   title:'客诉升级：苏州绿联包装投诉超48小时未处理',
+   sum:'客户苏州绿联包装3月31日提交的批次质量投诉（#CUS-20260331-089）已超48小时未处理，系统自动升级，请立即介入。',
+   src:'客情洞察 > 客诉反馈管理',time:'2小时前',exact:'2026-04-02 08:15',unread:true,pin:false,
+   tags:[{l:'超时：48h',c:'r'},{l:'已升级',c:'o'}],
+   det:{desc:'工单#CUS-20260331-089涉及2026年3月第三批次降解袋在客户仓储环境中出现提前降解迹象，涉及货值约12万元。',
+     data:[{l:'工单号',v:'CUS-20260331-089'},{l:'客户',v:'苏州绿联包装'},{l:'超时时长',v:'48小时'},{l:'涉及金额',v:'12万元'}],
+     advice:'建议茵创公司质检负责人今日联系客户，确认问题批次并启动退换货流程，同时排查同批次产品。'}},
+  {id:5,type:'RD',tn:'需求信息提醒',p:'low',
+   title:'知识库审核通过：PBAT/PLA配比改进研究报告',
+   sum:'研究院提交的《PBAT/PLA配比改进研究报告（2026Q1版）》已审核通过，正式收录至研发知识库，编号KB-RD-202604-017。',
+   src:'研发创新 > 知识库管理',time:'3小时前',exact:'2026-04-02 07:30',unread:false,pin:false,
+   tags:[{l:'审核通过',c:'b'}],
+   det:{desc:'文档由研究院赵博士提交，经知识库管理员李工于今日07:28审核通过，已分配知识库编号并正式发布。',
+     data:[{l:'文档编号',v:'KB-RD-202604-017'},{l:'提交人',v:'赵博士'},{l:'审核人',v:'李工'},{l:'状态',v:'已发布'}],
+     advice:'文档已收录，相关研发人员可在知识库中检索查阅。'}},
+  {id:6,type:'STR',tn:'战略与政策推送',p:'mid',
+   title:'政策提醒：发改委发布《生物降解塑料推广应用行动方案（2026）》',
+   sum:'国家发改委4月1日正式发布《生物降解塑料推广应用行动方案（2026-2030年）》，涉及强制替代时间节点及市场准入要求，对本司业务具有重要影响。',
+   src:'战略研判 > 政策法规监测',time:'昨天',exact:'2026-04-01 17:00',unread:false,pin:false,
+   tags:[{l:'政策利好',c:'b'},{l:'紧急关注',c:'o'}],
+   det:{desc:'国家发改委联合工信部、生态环境部发布该行动方案，明确2027年底前餐饮外卖等重点领域全面禁止不可降解塑料，设立企业认证白名单制度。',
+     data:[{l:'发布机构',v:'国家发改委'},{l:'发布时间',v:'2026-04-01'},{l:'影响等级',v:'重大'},{l:'生效日期',v:'2026-07-01'}],
+     advice:'建议战规部5个工作日内完成政策解读报告，法务部评估白名单认证申请事宜。'}},
+  {id:7,type:'PAT',tn:'专利与侵权预警',p:'mid',
+   title:'商标字号侵权预警：发现2家企业使用近似字号"蓝山降解"',
+   sum:'月度商标扫描发现广州、成都共2家企业使用与本司近似字号，请法务部评估侵权风险。',
+   src:'研发创新 > 商标字号监测',time:'昨天',exact:'2026-04-01 15:30',unread:true,pin:false,
+   tags:[{l:'涉及企业：2家',c:'o'}],
+   det:{desc:'本月商标字号扫描任务完成，发现广州蓝山降解材料有限公司、成都蓝山新材料科技有限公司两家企业使用含"蓝山"字样的近似字号。',
+     data:[{l:'涉及企业数',v:'2家'},{l:'字号',v:'蓝山降解/蓝山新材'},{l:'地区',v:'广州/成都'},{l:'风险等级',v:'中'}],
+     advice:'建议法务部在10个工作日内完成侵权核查，必要时通过工商部门提出异议申请。'}},
+  {id:8,type:'RD',tn:'需求信息提醒',p:'low',
+   title:'新需求待审核：茵创公司提交高透明度PLA薄膜开发需求',
+   sum:'茵创公司产品部今日提交"超高透明度PLA薄膜（透光率≥92%）"开发需求，已进入需求池等待研究院审核。',
+   src:'研发创新 > 需求池管理',time:'4小时前',exact:'2026-04-02 06:00',unread:true,pin:false,
+   tags:[{l:'待审核',c:'b'}],
+   det:{desc:'茵创公司产品部提交新材料开发需求，目标参数：透光率≥92%、厚度0.02-0.05mm、生物降解率≥90%（GB/T 19277）。',
+     data:[{l:'提报部门',v:'茵创公司产品部'},{l:'目标透光率',v:'≥92%'},{l:'降解率要求',v:'≥90%'},{l:'状态',v:'待审核'}],
+     advice:'请研究院相关负责人在5个工作日内完成需求可行性评估并给出初步答复。'}},
+  {id:9,type:'PUB',tn:'舆情与品牌预警',p:'mid',
+   title:'行业舆情预警：头部媒体质疑国内降解材料认证标准混乱',
+   sum:'财新、第一财经今日发布调查报道，指出当前国内生物降解材料认证标准存在多标准并行、认证门槛不统一问题，可能影响行业整体公信力。',
+   src:'客情洞察 > 行业舆情监测',time:'今天',exact:'2026-04-02 07:00',unread:true,pin:false,
+   tags:[{l:'行业影响',c:'o'},{l:'间接风险：中',c:'o'}],
+   det:{desc:'财新、第一财经联合报道，指出GB/T 19277、ISO 14855等多标准并行，部分中小企业借助标准差异进行"洗绿"营销，引发行业监管关注。',
+     data:[{l:'媒体',v:'财新/第一财经'},{l:'影响范围',v:'全行业'},{l:'风险类型',v:'间接'},{l:'关注度',v:'持续上升'}],
+     advice:'建议法务部与战规部联合评估，结合本司认证情况准备公关声明，主动与媒体建立沟通渠道。'}},
+  {id:10,type:'CUS',tn:'客诉信息提醒',p:'low',
+   title:'品牌舆情周报：上周正面声量占比73%',
+   sum:'上周（3月25日—3月31日）媒体提及总量1,234次，正面声量73%（同比升5%），中性20%，负面7%。',
+   src:'客情洞察 > 舆情监测',time:'昨天',exact:'2026-04-01 09:00',unread:false,pin:false,
+   tags:[{l:'正面声量：73%',c:'b'}],
+   det:{desc:'上周舆情监测周报，整体态势向好，负面声量下降，但仍有少量用户对产品降解时间存在疑问。',
+     data:[{l:'媒体提及量',v:'1234次'},{l:'正面声量',v:'73%'},{l:'负面声量',v:'7%'},{l:'周环比',v:'+5%'}],
+     advice:'建议营销中心持续加强降解材料科普内容输出，引导正面舆论。'}},
+  {id:11,type:'MKT',tn:'竞对动态预警',p:'low',
+   title:'原材料价格预警：PBAT现货价格较上月上涨12%',
+   sum:'产业链洞察模块监测到国内PBAT主要现货市场本周均价达18,500元/吨，较上月上涨12%，建议关注采购成本影响。',
+   src:'产业链洞察 > 价格监测',time:'昨天',exact:'2026-04-01 10:00',unread:false,pin:false,
+   tags:[{l:'涨幅：+12%',c:'o'}],
+   det:{desc:'产业链洞察价格监测模块数据显示，本周PBAT现货均价18,500元/吨，较3月均价上涨约12%，主要因上游BDO价格上涨带动。',
+     data:[{l:'材料',v:'PBAT'},{l:'当前均价',v:'18500元/吨'},{l:'涨幅',v:'+12%'},{l:'主因',v:'BDO价格上涨'}],
+     advice:'建议采购部门评估是否提前锁定季度采购价格，避免进一步成本上升。'}},
+  {id:12,type:'STR',tn:'战略与政策推送',p:'low',
+   title:'权限申请审批通过：研发知识库编辑权限',
+   sum:'您于2026年3月30日提交的研发知识库编辑权限申请已由管理员审批通过，权限已于今日08:00生效。',
+   src:'系统管理 > 权限管理',time:'今天',exact:'2026-04-02 08:00',unread:false,pin:false,
+   tags:[{l:'审批通过',c:'b'}],
+   det:{desc:'权限申请已于2026年4月2日08:00生效，权限类型：研发知识库编辑权限，有效期至2027年4月2日，审批人：系统管理员王工。',
+     data:[{l:'权限类型',v:'知识库编辑'},{l:'审批人',v:'王工'},{l:'生效时间',v:'04-02 08:00'},{l:'有效期',v:'1年'}],
+     advice:'权限已生效，如有问题请联系系统管理员。'}}
+];
+
+const typeColor={PAT:'#E24B4A',PUB:'#D85A30',MKT:'#EF9F27',CUS:'#1D9E75',RD:'#7F77DD',STR:'#185FA5',SYS:'#888780'};
+const typeBg={PAT:'#FCEBEB',PUB:'#FAECE7',MKT:'#FAEEDA',CUS:'#E1F5EE',RD:'#EEEDFE',STR:'#E6F1FB',SYS:'#F1EFE8'};
+const typeEmoji={PAT:'⚖',PUB:'📡',MKT:'📈',CUS:'💬',RD:'🔬',STR:'🏛',SYS:'⚙'};
+
+let curType='all',selId=null,showUnread=true,showHigh=false;
+const readSet=new Set(msgs.filter(m=>!m.unread).map(m=>m.id));
+const ignoredSet=new Set();
+
+function getVisible(){
+  return msgs.filter(m=>{
+    if(ignoredSet.has(m.id))return false;
+    if(curType!=='all'&&m.type!==curType)return false;
+    if(showUnread&&readSet.has(m.id))return false;
+    if(showHigh&&m.p!=='high')return false;
+    return true;
+  });
+}
+
+function renderList(list){
+  list=list||getVisible();
+  const panel=document.getElementById('listPanel');
+  if(!list.length){panel.innerHTML='<div style="text-align:center;padding:60px 0;color:#9a9a94;font-size:13px">暂无消息</div>';return;}
+  panel.innerHTML=list.map(m=>{
+    const isU=!readSet.has(m.id),isSel=m.id===selId;
+    const col=typeColor[m.type]||'#888780';
+    const bg=typeBg[m.type]||'#F1EFE8';
+    const em=typeEmoji[m.type]||'📌';
+    const tagHtml=m.tags.map(t=>`<span class="dtag dtag-${t.c}">${t.l}</span>`).join('');
+    return `<div class="card${isU?' unread':''}${isSel?' active':''}" style="padding-left:24px" onclick="selMsg(${m.id})">
+      <div class="pbar pb-${m.p[0]}"></div>
+      <div class="card-left">
+        <div class="type-icon" style="background:${bg};color:${col}">${em}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-header">
+          <div class="card-title">${m.title}</div>
+          ${m.pin?'<span class="pin-badge">置顶</span>':''}
+        </div>
+        <div class="card-meta">
+          <span class="src-tag">${m.src}</span>
+        </div>
+        <div class="card-sum">${m.sum}</div>
+        <div class="dtags">${tagHtml}</div>
+      </div>
+      <div class="card-right">
+        <span class="ctime">${m.time}</span>
+        ${isU?'<span class="udot"></span>':''}
+      </div>
+    </div>`;
+  }).join('');
+  updateStats();
+}
+
+function selMsg(id){
+  selId=id;readSet.add(id);
+  const m=msgs.find(x=>x.id===id),d=m.det;
+  const col=typeColor[m.type]||'#888780';
+  const bg=typeBg[m.type]||'#F1EFE8';
+  const pLabel=m.p==='high'?'高优先级':m.p==='mid'?'中优先级':'低优先级';
+  const pCls=m.p==='high'?'dtag-r':m.p==='mid'?'dtag-o':'dtag-b';
+  document.getElementById('detailPanel').innerHTML=`
+    <div class="dp-scroll">
+      <div class="dp-head">
+        <div class="dp-title-row">
+          <div class="dp-title">${m.title}</div>
+          <span class="dp-badge ${pCls}">${pLabel}</span>
+        </div>
+        <div class="dp-meta">${m.exact}</div>
+        <div class="dp-src">${m.src}</div>
+      </div>
+      <div class="dp-sec">
+        <div class="dp-label">消息详情</div>
+        <div class="dp-text">${d.desc}</div>
+      </div>
+      <div class="dp-sec">
+        <div class="dp-label">关联数据</div>
+        <div class="dp-grid">${d.data.map(x=>`<div class="dp-cell"><div class="dp-clabel">${x.l}</div><div class="dp-cval">${x.v}</div></div>`).join('')}</div>
+      </div>
+      <div class="dp-sec">
+        <div class="dp-label">处置建议</div>
+        <div class="dp-advice">${d.advice}</div>
+      </div>
+      <div class="dp-actions">
+        <button class="abtn abtn-p">去处理 ↗</button>
+        <button class="abtn abtn-s" onclick="ignoreMsg(${m.id})">忽略此消息</button>
+        <button class="abtn abtn-s" onclick="markRead(${m.id})">标记已读</button>
+      </div>
+    </div>`;
+  renderList();
+}
+
+function ignoreMsg(id){
+  ignoredSet.add(id);selId=null;
+  document.getElementById('detailPanel').innerHTML='<div class="dp-empty"><div class="dp-empty-icon">📋</div><div>点击消息查看详情</div></div>';
+  renderList();
+}
+function markRead(id){readSet.add(id);renderList();}
+function markAllRead(){msgs.forEach(m=>readSet.add(m.id));renderList();}
+function filterType(type,el){
+  curType=type;
+  document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
+  el.classList.add('active');renderList();
+}
+function toggleF(key,btn){
+  if(key==='unread'){showUnread=!showUnread;btn.classList.toggle('on',showUnread);}
+  if(key==='high'){showHigh=!showHigh;btn.classList.toggle('on',showHigh);}
+  renderList();
+}
+function doSearch(q){
+  if(!q){renderList();return;}
+  const lq=q.toLowerCase();
+  const list=getVisible().filter(m=>m.title.toLowerCase().includes(lq)||m.sum.toLowerCase().includes(lq));
+  const re=new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi');
+  const panel=document.getElementById('listPanel');
+  if(!list.length){panel.innerHTML='<div style="text-align:center;padding:60px 0;color:#9a9a94;font-size:13px">未找到相关消息</div>';return;}
+  panel.innerHTML=list.map(m=>{
+    const isU=!readSet.has(m.id),isSel=m.id===selId;
+    const col=typeColor[m.type]||'#888780';
+    const bg=typeBg[m.type]||'#F1EFE8';
+    const em=typeEmoji[m.type]||'📌';
+    const hl=s=>s.replace(re,t=>`<mark>${t}</mark>`);
+    const tagHtml=m.tags.map(t=>`<span class="dtag dtag-${t.c}">${t.l}</span>`).join('');
+    return `<div class="card${isU?' unread':''}${isSel?' active':''}" style="padding-left:24px" onclick="selMsg(${m.id})">
+      <div class="pbar pb-${m.p[0]}"></div>
+      <div class="card-left"><div class="type-icon" style="background:${bg};color:${col}">${em}</div></div>
+      <div class="card-body">
+        <div class="card-header"><div class="card-title">${hl(m.title)}</div>${m.pin?'<span class="pin-badge">置顶</span>':''}</div>
+        <div class="card-meta"><span class="src-tag">${m.src}</span></div>
+        <div class="card-sum">${hl(m.sum)}</div>
+        <div class="dtags">${tagHtml}</div>
+      </div>
+      <div class="card-right"><span class="ctime">${m.time}</span>${isU?'<span class="udot"></span>':''}</div>
+    </div>`;
+  }).join('');
+}
+function updateStats(){
+  const unread=msgs.filter(m=>!readSet.has(m.id)&&!ignoredSet.has(m.id)).length;
+  const today=msgs.filter(m=>['今天','10分钟前','32分钟前','1小时前','2小时前','3小时前','4小时前'].includes(m.time)).length;
+  document.getElementById('unreadCount').textContent=unread;
+  document.getElementById('totalCount').textContent=msgs.length-ignoredSet.size;
+  document.getElementById('todayCount').textContent=today;
+}
+renderList();
+</script>
+</body>
+</html>
