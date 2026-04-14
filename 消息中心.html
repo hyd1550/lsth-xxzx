@@ -300,30 +300,20 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color
       <div class="innav-head">消息分类</div>
       <div class="ini ini-all active" id="ini-all" onclick="fMsg('all',this)">全部消息<span class="ini-cnt r" id="cnt-all">8</span></div>
       <div class="innav-div"></div>
-      <div class="ingrp">监控企业</div>
-      <div class="ini" id="ini-ent-watch" onclick="fMsg('ent-watch',this)">企业监控<span class="ini-cnt" id="cnt-ent-watch">2</span></div>
-      <div class="ini" id="ini-tm-warn" onclick="fMsg('tm-warn',this)">商标预警监控<span class="ini-cnt" id="cnt-tm-warn">1</span></div>
-      <div class="ingrp">竞对动态预警</div>
-      <div class="ini" id="ini-comp-pub" onclick="fMsg('comp-pub',this)">舆情动态<span class="ini-cnt" id="cnt-comp-pub">0</span></div>
-      <div class="ini" id="ini-comp-biz" onclick="fMsg('comp-biz',this)">工商变更<span class="ini-cnt" id="cnt-comp-biz">1</span></div>
-      <div class="ini" id="ini-comp-bid" onclick="fMsg('comp-bid',this)">招投标动态<span class="ini-cnt" id="cnt-comp-bid">1</span></div>
-      <div class="ini" id="ini-comp-pat" onclick="fMsg('comp-pat',this)">专利发布<span class="ini-cnt" id="cnt-comp-pat">1</span></div>
-      <div class="ingrp">舆情监控</div>
-      <div class="ini" id="ini-pub-warn" onclick="fMsg('pub-warn',this)">舆情预警<span class="ini-cnt" id="cnt-pub-warn">2</span></div>
-      <div class="ini" id="ini-pub-opp" onclick="fMsg('pub-opp',this)">行业机遇<span class="ini-cnt" id="cnt-pub-opp">0</span></div>
-      <div class="ingrp">政策发布提醒</div>
-      <div class="ini" id="ini-policy" onclick="fMsg('policy',this)">政策发布<span class="ini-cnt" id="cnt-policy">0</span></div>
+      <div class="ini" id="ini-tm-warn" onclick="fMsg('tm-warn',this)">商标侵权预警<span class="ini-cnt" id="cnt-tm-warn">1</span></div>
+      <div class="ini" id="ini-pub-warn" onclick="fMsg('pub-warn',this)">舆情预警<span class="ini-cnt" id="cnt-pub-warn">5</span></div>
+      <div class="ini" id="ini-pub-opp" onclick="fMsg('pub-opp',this)">行业机遇<span class="ini-cnt" id="cnt-pub-opp">3</span></div>
+      <div class="ini" id="ini-policy" onclick="fMsg('policy',this)">政策发布<span class="ini-cnt" id="cnt-policy">1</span></div>
     </div>
 
     <!-- 任务类型 (shown when task active) -->
     <div id="innav-task" class="hide">
       <div class="innav-head">任务类型</div>
-      <div class="ini ini-all active" id="ini-task-all" onclick="fTask('all',this)">全部任务<span class="ini-cnt o" id="tcnt-all">4</span></div>
+      <div class="ini ini-all active" id="ini-task-all" onclick="fTask('all',this)">全部任务<span class="ini-cnt o" id="tcnt-all">3</span></div>
       <div class="innav-div"></div>
       <div class="ini" id="ini-task-approval" onclick="fTask('approval',this)">需求审批<span class="ini-cnt" id="tcnt-approval">1</span></div>
       <div class="ini" id="ini-task-complaint" onclick="fTask('complaint',this)">客诉反馈处理<span class="ini-cnt" id="tcnt-complaint">1</span></div>
       <div class="ini" id="ini-task-brief" onclick="fTask('brief',this)">简报变更申请<span class="ini-cnt" id="tcnt-brief">1</span></div>
-      <div class="ini" id="ini-task-report" onclick="fTask('report',this)">报告变更提醒<span class="ini-cnt" id="tcnt-report">1</span></div>
     </div>
 
   </div><!-- /innav -->
@@ -333,7 +323,6 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color
     <div class="toolbar">
       <input class="search" id="msg-search" placeholder="搜索消息…" oninput="renderMsg()"/>
       <button class="fbtn on" id="fb-unread" onclick="toggleF('unread',this)">未读</button>
-      <button class="fbtn" id="fb-high" onclick="toggleF('high',this)">高优先级</button>
       <button class="fbtn-txt" onclick="markAllRead()">全部已读</button>
     </div>
     <div class="list-wrap"><div class="list-inner" id="msg-list"></div></div>
@@ -352,7 +341,7 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color
   <div class="mpanel hide" id="panel-task">
     <div class="task-toolbar">
       <span class="task-toolbar-t">待处理任务</span>
-      <span class="task-stat" id="task-stat">共 4 项待处理</span>
+      <span class="task-stat" id="task-stat">共 3 项待处理</span>
     </div>
     <div class="list-wrap"><div class="list-inner" id="task-list"></div></div>
   </div>
@@ -377,23 +366,23 @@ body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color
    DATA
 ═══════════════════════════ */
 const MSGS=[
-  {id:'m1',cat:'ent-watch',catN:'企业监控',group:'监控企业',ico:'🏢',icoCls:'ico-ent',ctag:'ctag-ent',
-   title:'【企业监控】绿川科技被列入经营异常名录',
+  {id:'m1',cat:'pub-warn',catN:'舆情预警',group:'舆情预警',ico:'🏢',icoCls:'ico-pub',ctag:'ctag-pub',
+   title:'【舆情预警】绿川科技被列入经营异常名录',
    sum:'监控企业绿川科技（深圳）于2026-04-09被列入经营异常名录，原因：未按规定期限公示2025年度报告，建议持续关注。',
    time:'10分钟前',timeX:'2026-04-10 09:45',unread:true,urg:'mid',
    tags:[{l:'经营异常',c:'o'},{l:'绿川科技',c:'b'}],
    det:{desc:'绿川科技（深圳）有限公司于2026-04-09被深圳市市场监督管理局列入经营异常名录，原因为未按法定期限在企业信用信息公示系统中公示2025年度报告。',
      data:[{l:'企业名称',v:'绿川科技（深圳）'},{l:'异常原因',v:'未公示年报'},{l:'列入机构',v:'深圳市场监管局'},{l:'列入日期',v:'2026-04-09'}],
      advice:'建议战略发展部跟踪该企业后续整改情况，评估是否影响竞争格局及合作意向。'}},
-  {id:'m2',cat:'ent-watch',catN:'企业监控',group:'监控企业',ico:'🏢',icoCls:'ico-ent',ctag:'ctag-ent',
-   title:'【企业监控】博纳新材料完成增资至1.8亿元',
+  {id:'m2',cat:'pub-opp',catN:'行业机遇',group:'行业机遇',ico:'🌱',icoCls:'ico-pol',ctag:'ctag-pol',
+   title:'【行业机遇】博纳新材料完成增资至1.8亿元',
    sum:'监控企业博纳新材料完成增资扩股，注册资本由8500万元增至1.8亿元，引入上海绿投基金，可能加速产能扩张。',
    time:'2小时前',timeX:'2026-04-10 08:00',unread:false,urg:'low',
    tags:[{l:'注册资本变更',c:'b'},{l:'博纳新材料',c:'b'}],
    det:{desc:'博纳新材料科技有限公司完成增资扩股，注册资本由8500万元增至1.8亿元。新投资方上海绿投产业基金持股25%，资金将用于新建江苏泰州生产基地。',
      data:[{l:'企业名称',v:'博纳新材料'},{l:'原注册资本',v:'8500万元'},{l:'新注册资本',v:'1.8亿元'},{l:'新投资方',v:'上海绿投基金'}],
      advice:'建议结合竞对分析报告，评估其新产能对本司市场份额的潜在冲击，提前制定应对策略。'}},
-  {id:'m3',cat:'tm-warn',catN:'商标预警企业监控',group:'监控企业',ico:'™',icoCls:'ico-ent',ctag:'ctag-ent',
+  {id:'m3',cat:'tm-warn',catN:'商标侵权预警',group:'商标侵权预警',ico:'™',icoCls:'ico-ent',ctag:'ctag-ent',
    title:'【商标预警】发现高相似度商标申请，建议评估异议',
    sum:'苏州美绿科技申请商标"蓝山绿材"（第17类），与本司注册商标"蓝山屯河"视觉近似度达78%，公示期30天，建议法务部及时评估。',
    time:'昨天 16:30',timeX:'2026-04-09 16:30',unread:true,urg:'high',
@@ -401,56 +390,56 @@ const MSGS=[
    det:{desc:'国家知识产权局商标局公示，苏州美绿科技有限公司申请注册商标"蓝山绿材"（申请号：2026087654321），国际分类第17类，与本司商标字形相似度较高。',
      data:[{l:'申请商标',v:'蓝山绿材'},{l:'申请人',v:'苏州美绿科技'},{l:'申请号',v:'2026087654321'},{l:'视觉近似度',v:'78%'}],
      advice:'公示期30天，建议法务部尽快评估是否提交商标异议申请，以保护本司品牌权益。'}},
-  {id:'m4',cat:'comp-biz',catN:'工商变更',group:'竞对动态预警',ico:'📋',icoCls:'ico-comp',ctag:'ctag-comp',
-   title:'【工商变更】博纳新材料更换法定代表人',
+  {id:'m4',cat:'pub-warn',catN:'舆情预警',group:'舆情预警',ico:'📋',icoCls:'ico-pub',ctag:'ctag-pub',
+   title:'【舆情预警】博纳新材料更换法定代表人',
    sum:'博纳新材料于2026-04-08完成工商变更，法定代表人由"陈志远"变更为"王海明"，同步新增高分子新材料研发业务范围。',
    time:'昨天 14:00',timeX:'2026-04-09 14:00',unread:false,urg:'low',
    tags:[{l:'法人变更',c:'b'},{l:'经营范围扩展',c:'o'}],
    det:{desc:'博纳新材料科技有限公司于2026-04-08完成工商变更登记：① 法定代表人由陈志远变更为王海明；② 经营范围新增"高分子新材料及可降解材料研发、生产"。',
      data:[{l:'变更类型',v:'法人 + 经营范围'},{l:'变更日期',v:'2026-04-08'},{l:'新法定代表人',v:'王海明'},{l:'原法定代表人',v:'陈志远'}],
      advice:'建议关注管理层变动对其战略方向的影响，重点跟踪其在可降解材料领域后续动作。'}},
-  {id:'m5',cat:'comp-bid',catN:'招投标动态',group:'竞对动态预警',ico:'🏆',icoCls:'ico-comp',ctag:'ctag-comp',
-   title:'竞对企业中标广东省政府可降解袋采购项目',
+  {id:'m5',cat:'pub-opp',catN:'行业机遇',group:'行业机遇',ico:'🏆',icoCls:'ico-pol',ctag:'ctag-pol',
+   title:'【行业机遇】竞对企业中标广东省政府可降解袋采购项目',
    sum:'绿川科技以1280万元中标广东省机关事务管理局2026年度可降解包装袋采购项目，产品规格与本司主力产品高度重叠。',
    time:'昨天 10:00',timeX:'2026-04-09 10:00',unread:true,urg:'mid',
    tags:[{l:'中标：1280万',c:'o'},{l:'政府采购',c:'b'}],
    det:{desc:'绿川科技以总价1280万元中标广东省机关事务管理局"2026年度绿色可降解包装袋采购项目（第一标段）"，产品规格：PLA+PBAT复合降解袋，年用量约850吨。',
      data:[{l:'竞标企业',v:'绿川科技'},{l:'中标金额',v:'1280万元'},{l:'采购方',v:'广东省机关事务局'},{l:'产品规格',v:'PLA+PBAT复合袋'}],
      advice:'建议营销中心分析本司未参与的原因，对同类政府采购项目加强响应，避免竞对占据政府渠道资源。'}},
-  {id:'m6',cat:'comp-pat',catN:'专利发布',group:'竞对动态预警',ico:'📄',icoCls:'ico-comp',ctag:'ctag-comp',
-   title:'竞对企业发布PBAT共混改性配方新专利',
+  {id:'m6',cat:'pub-warn',catN:'舆情预警',group:'舆情预警',ico:'📄',icoCls:'ico-pub',ctag:'ctag-pub',
+   title:'【舆情预警】竞对企业发布PBAT共混改性配方新专利',
    sum:'绿川科技申请发明专利"一种高强度PBAT/TPS共混改性可降解薄膜配方及制备方法"，核心参数与本司在研项目存在技术交叉。',
    time:'3天前',timeX:'2026-04-07 11:20',unread:true,urg:'mid',
    tags:[{l:'发明专利',c:'o'},{l:'技术重叠风险',c:'r'}],
    det:{desc:'专利公开公告（公开号CN2026-PBAT-GC-021），申请人：绿川科技，名称：一种高强度PBAT/TPS共混改性可降解薄膜配方及制备方法。与本司研发知识库KB-RD-202601-008存在方法交叉。',
      data:[{l:'专利申请号',v:'CN2026PBATGC021'},{l:'申请人',v:'绿川科技'},{l:'申请日期',v:'2026-04-07'},{l:'技术领域',v:'PBAT共混改性'}],
      advice:'建议研发院尽快评估技术交叉程度，必要时加快本司同类专利申请进度以建立防护壁垒。'}},
-  {id:'m7',cat:'pub-warn',catN:'舆情预警',group:'舆情监控',ico:'⚠',icoCls:'ico-pub',ctag:'ctag-pub',
-   title:'【行业风险】主流媒体集中报道"伪降解"产品乱象',
+  {id:'m7',cat:'pub-warn',catN:'舆情预警',group:'舆情预警',ico:'⚠',icoCls:'ico-pub',ctag:'ctag-pub',
+   title:'【舆情预警】主流媒体集中报道"伪降解"产品乱象',
    sum:'财经日报、新华网等12家主流媒体于近三日集中发布"可降解材料认证造假"相关报道，行业整体负面情绪持续上升，风险等级：中。',
    time:'1小时前',timeX:'2026-04-10 09:00',unread:true,urg:'mid',
    tags:[{l:'行业风险',c:'c'},{l:'媒体曝光×12',c:'r'}],
    det:{desc:'2026年4月8-10日，财新、新华网、第一财经等12家主流媒体相继刊发"可降解塑料行业虚假宣传"相关报道，核心质疑：部分产品标注"可降解"但实际降解率不达标。',
      data:[{l:'涉及媒体数',v:'12家'},{l:'报道时间段',v:'04-08 至 04-10'},{l:'行业情感分',v:'负面 68%'},{l:'风险等级',v:'行业中级'}],
      advice:'建议市场部门准备本司产品合规证书及第三方检测报告，以便媒体询问时快速响应，同时评估是否主动向行业协会提供规范材料。'}},
-  {id:'m8',cat:'pub-warn',catN:'舆情预警',group:'舆情监控',ico:'⚠',icoCls:'ico-pub',ctag:'ctag-pub',
-   title:'【本企业风险】微博涉企质量质疑帖持续扩散',
+  {id:'m8',cat:'pub-warn',catN:'舆情预警',group:'舆情预警',ico:'⚠',icoCls:'ico-pub',ctag:'ctag-pub',
+   title:'【舆情预警】微博涉企质量质疑帖持续扩散',
    sum:'微博用户"@环保体验官"发文质疑本司降解袋3个月未降解，帖子获赞1800+、转发690次，风险评分88，已触发本企业舆情预警阈值。',
    time:'2小时前',timeX:'2026-04-10 08:10',unread:true,urg:'high',
    tags:[{l:'风险评分：88',c:'r'},{l:'扩散中',c:'r'},{l:'本企业',c:'c'}],
    det:{desc:'微博用户@环保体验官（粉丝：12.3万）发布长图文，称亲测"蓝山屯河"品牌PLA降解袋在户外放置3个月未见明显降解，配有对比图片及视频。获赞1803次、转发692次。',
      data:[{l:'平台',v:'微博'},{l:'风险评分',v:'88分'},{l:'曝光量',v:'3.6万次'},{l:'情感倾向',v:'负面 81%'}],
      advice:'建议营销中心2小时内完成核实，公关专员起草官方回应（突出GB/T 19277标准合规），联系平台进行内容评估，通知相关负责人重点关注。'}},
-  {id:'m9',cat:'pub-opp',catN:'行业机遇',group:'舆情监控',ico:'🌱',icoCls:'ico-pub',ctag:'ctag-pub',
-   title:'欧盟新规正式落地，可降解包装市场迎来重大机遇',
+  {id:'m9',cat:'pub-opp',catN:'行业机遇',group:'行业机遇',ico:'🌱',icoCls:'ico-pol',ctag:'ctag-pol',
+   title:'【行业机遇】欧盟新规正式落地，可降解包装市场迎来重大机遇',
    sum:'欧盟委员会发布PPWR执行时间表，要求2030年前所有一次性包装强制使用可降解或可回收材料，欧洲市场年需求预计增长15%以上。',
    time:'昨天 09:00',timeX:'2026-04-09 09:00',unread:false,urg:'low',
    tags:[{l:'欧盟PPWR',c:'g'},{l:'市场机遇',c:'g'}],
    det:{desc:'欧盟委员会正式公布《包装和包装废弃物法规》（PPWR）执行路线图：2027年起新型一次性包装须满足可持续设计标准，2030年前强制推行可降解/可回收材料。',
      data:[{l:'法规名称',v:'欧盟PPWR'},{l:'强制执行年',v:'2030年'},{l:'目标市场',v:'欧盟27国'},{l:'年增需求预测',v:'>15%'}],
      advice:'建议战略发展部评估本司产品EU认证现状，制定欧洲市场准入路线图，结合营销中心尽早布局欧洲客户开发。'}},
-  {id:'m10',cat:'policy',catN:'政策发布提醒',group:'政策发布提醒',ico:'📜',icoCls:'ico-pol',ctag:'ctag-pol',
-   title:'国家发改委发布可降解塑料推广应用指导意见',
+  {id:'m10',cat:'policy',catN:'政策发布',group:'政策发布',ico:'📜',icoCls:'ico-pol',ctag:'ctag-pol',
+   title:'【政策发布】国家发改委发布可降解塑料推广应用指导意见',
    sum:'国家发改委、生态环境部联合发布《关于进一步加快可降解塑料制品推广应用的指导意见》，设立专项补贴，最高可补贴产能投资额15%。',
    time:'4天前',timeX:'2026-04-06 15:00',unread:false,urg:'mid',
    tags:[{l:'政策利好',c:'g'},{l:'国家发改委',c:'b'}],
@@ -465,55 +454,33 @@ const TASKS=[
    desc:'研究院张明提交PBAT柔性薄膜配方改良技术需求单，涉及预算32万元，需求优先级：高。需负责人在3个工作日内完成审批。',
    submitter:'张明 · 研究院',createTime:'2026-04-08 14:30',urg:'high',deadline:'2026-04-11',isNew:true,
    targetPage:'信息管理 > 技术需求管理',
-   data:[{l:'需求编号',v:'RD-2026-0312'},{l:'提交部门',v:'研究院'},{l:'预估预算',v:'32万元'},{l:'审批截止',v:'2026-04-11'}]},
+   data:[{l:'提交部门',v:'研究院'},{l:'提交时间',v:'2026-04-08 14:30'}]},
   {id:'t2',type:'complaint',typeN:'客诉反馈处理',typeCls:'tt-complaint',ico:'📞',
    title:'苏州绿联包装客诉 #CUS-20260331-089 超时未处理',
    desc:'客户苏州绿联包装3月31日提交批次质量投诉（第三批次降解袋提前降解），工单已超时72小时，系统自动升级至负责人，涉及货值约12万元。',
    submitter:'客服系统 · 自动升级',createTime:'2026-03-31 10:00',urg:'high',deadline:'已超时 72h',isNew:true,
    targetPage:'客情洞察 > 客诉反馈信息管理',
-   data:[{l:'工单号',v:'CUS-20260331-089'},{l:'客户名称',v:'苏州绿联包装'},{l:'涉及金额',v:'约12万元'},{l:'超时时长',v:'72小时'}]},
+   data:[{l:'客户名称',v:'苏州绿联包装'},{l:'反馈时间',v:'2026-03-31 10:00'}]},
   {id:'t3',type:'brief',typeN:'简报变更申请',typeCls:'tt-brief',ico:'📝',
    title:'《竞争态势月报》4月期主题变更申请待审批',
    desc:'战略发展部刘洋申请将《竞争态势月报》4月期主题由"原材料市场动态"变更为"竞对企业融资动态专题"，需负责人在1个工作日内完成审批。',
    submitter:'刘洋 · 战略发展部',createTime:'2026-04-09 17:00',urg:'mid',deadline:'2026-04-10',isNew:true,
-   targetPage:'解决方案 > 案例上传记录',
-   data:[{l:'简报名称',v:'竞争态势月报'},{l:'申请人',v:'刘洋'},{l:'原主题',v:'原材料市场动态'},{l:'新主题',v:'竞对融资动态专题'}]},
-  {id:'t4',type:'report',typeN:'报告变更提醒',typeCls:'tt-report',ico:'📊',
-   title:'《聚酯行业2026Q2研究报告》主题调整提醒',
-   desc:'战略研判系统检测到《聚酯行业2026Q2研究报告》与最新行业情报存在主题偏差，建议研究负责人在本周内评估是否调整报告方向。',
-   submitter:'战略研判系统 · 自动提醒',createTime:'2026-04-10 09:00',urg:'low',deadline:'建议本周内',isNew:false,
-   targetPage:'战略研判 > 市场风险分析',
-   data:[{l:'报告名称',v:'聚酯行业2026Q2研究报告'},{l:'提醒来源',v:'战略研判系统'},{l:'建议操作',v:'主题评估与调整'},{l:'建议时限',v:'本周内'}]},
+   targetPage:'系统管理 > 技术简报接口管理',
+   data:[{l:'申请时间',v:'2026-04-09 17:00'},{l:'申请人',v:'刘洋'},{l:'原主题',v:'原材料市场动态'},{l:'新主题',v:'竞对融资动态专题'}]},
 ];
 
 const SUB=[
-  {group:'监控企业',ico:'🏢',items:[
-    {key:'ent-watch',name:'企业监控',desc:'工商变更、经营异常、法人变动等企业状态监控',en:true,freq:'realtime'},
-    {key:'tm-warn',name:'商标预警企业监控',desc:'监控企业的商标申请、近似商标预警提醒',en:true,freq:'hourly'},
-  ]},
-  {group:'竞对动态预警',ico:'📡',items:[
-    {key:'comp-pub',name:'舆情动态',desc:'竞对企业相关舆情、媒体报道实时动态',en:true,freq:'realtime'},
-    {key:'comp-biz',name:'工商变更',desc:'竞对企业工商信息变更、异常记录监控',en:true,freq:'daily'},
-    {key:'comp-bid',name:'招投标动态',desc:'竞对企业参与或中标重要招标项目提醒',en:true,freq:'daily'},
-    {key:'comp-pat',name:'专利发布',desc:'竞对企业专利申请与授权公告推送',en:false,freq:'daily'},
-  ]},
-  {group:'舆情监控',ico:'🔍',items:[
-    {key:'pub-warn-ind',name:'舆情预警 · 行业风险',desc:'行业整体负面舆情、媒体集中报道风险预警',en:true,freq:'realtime'},
-    {key:'pub-warn-ent',name:'舆情预警 · 本企业风险',desc:'涉及本企业品牌、产品的负面舆情实时预警',en:true,freq:'realtime'},
-    {key:'pub-opp',name:'行业机遇',desc:'政策利好、市场机遇相关舆情分析推送',en:true,freq:'daily'},
-  ]},
-  {group:'政策发布提醒',ico:'📜',items:[
-    {key:'policy',name:'政策发布提醒',desc:'与行业相关的国家及地方政策法规发布推送',en:true,freq:'daily'},
-  ]},
+  {key:'tm-warn',name:'商标侵权预警',ico:'™',desc:'监控企业商标申请、近似商标侵权风险预警提醒',en:true},
+  {key:'pub-warn',name:'舆情预警',ico:'⚠',desc:'行业及本企业负面舆情、竞对企业关键动态预警',en:true},
+  {key:'pub-opp',name:'行业机遇',ico:'🌱',desc:'行业增长趋势、市场机遇、政策利好等信号推送',en:true},
+  {key:'policy',name:'政策发布',ico:'📜',desc:'国家及地方与行业相关的政策法规发布推送',en:true},
 ];
 
 /* ═══════════════════════════
    STATE
 ═══════════════════════════ */
 let curSec='msg',curMCat='all',curTType='all',selMid=null,selTid=null;
-let mFilters={unread:true,high:false};
-const URGMAP={high:{l:'高优先级',cls:'urg-h'},mid:{l:'中优先级',cls:'urg-m'},low:{l:'低优先级',cls:'urg-l'}};
-const TURGMAP={high:{l:'紧急',cls:'urg-h'},mid:{l:'一般',cls:'urg-m'},low:{l:'普通',cls:'urg-l'}};
+let mFilters={unread:true};
 
 /* ═══════════════════════════
    SECTION SWITCH
@@ -558,7 +525,6 @@ function getMsgs(){
   return MSGS.filter(m=>{
     if(curMCat!=='all'&&m.cat!==curMCat) return false;
     if(mFilters.unread&&!m.unread) return false;
-    if(mFilters.high&&m.urg!=='high') return false;
     if(q&&!m.title.toLowerCase().includes(q)&&!m.sum.toLowerCase().includes(q)) return false;
     return true;
   });
@@ -572,10 +538,8 @@ function renderMsg(){
   const el=document.getElementById('msg-list');
   if(!list.length){el.innerHTML='<div class="lempty">暂无匹配消息</div>';return;}
   el.innerHTML=list.map(m=>{
-    const sc=m.urg==='high'?'sh':m.urg==='mid'?'sm':'sl';
     const th=m.tags.map(t=>`<span class="tag tag-${t.c}">${t.l}</span>`).join('');
     return`<div class="mcard${selMid===m.id?' sel':''}${m.unread?' unread':''}" onclick="selMsg('${m.id}')">
-      <div class="mcard-strip ${sc}"></div>
       <div class="mcard-ico ${m.icoCls}">${m.ico}</div>
       <div class="mcard-body">
         <div class="mcard-top">
@@ -607,20 +571,19 @@ function showMsgDetail(m){
   document.getElementById('dp-empty-msg').classList.add('hide');
   const dc=document.getElementById('dp-msg');
   dc.classList.remove('hide');
-  const urg=URGMAP[m.urg]||URGMAP.low;
   const det=m.det||{};
   dc.innerHTML=`
   <div class="dp-scroll">
     <div class="dp-head">
-      <div class="dp-metarow"><span class="tag ${m.ctag}">${m.catN}</span><span class="tag ${urg.cls}">${urg.l}</span></div>
+      <div class="dp-metarow"><span class="tag ${m.ctag}">${m.catN}</span></div>
       <div class="dp-title">${m.title}</div>
       <div class="dp-time">📅 ${m.timeX}&nbsp;·&nbsp;站内信</div>
     </div>
     ${det.desc?`<div class="dp-sec"><div class="dp-text">${det.desc}</div></div>`:''}
   </div>
   <div class="dp-actions">
-    <button class="abtn abtn-s" onclick="removeMsg('${m.id}')">归档</button>
-    <button class="abtn abtn-s" onclick="removeMsg('${m.id}')">删除</button>
+    <button class="abtn abtn-s" onclick="removeMsg('${m.id}')">忽略</button>
+    <button class="abtn abtn-s" onclick="markRead('${m.id}')">标记已读</button>
   </div>`;
   dc.querySelector('.dp-scroll').scrollTop=0;
 }
@@ -631,13 +594,19 @@ function removeMsg(id){
   selMid=null;resetMsgDetail();renderMsg();updateBadges();
 }
 
+function markRead(id){
+  const m=MSGS.find(x=>x.id===id);
+  if(m)m.unread=false;
+  renderMsg();updateBadges();
+}
+
 function markAllRead(){
   MSGS.forEach(m=>m.unread=false);
   renderMsg();updateBadges();
 }
 
 function updateBadges(){
-  const cats=['ent-watch','tm-warn','comp-pub','comp-biz','comp-bid','comp-pat','pub-warn','pub-opp','policy'];
+  const cats=['tm-warn','pub-warn','pub-opp','policy'];
   const total=MSGS.filter(m=>m.unread).length;
   const badge=document.getElementById('badge-msg');
   badge.textContent=total;badge.style.display=total?'':'none';
@@ -668,14 +637,11 @@ function renderTask(){
   document.getElementById('task-stat').textContent=`共 ${TASKS.length} 项待处理`;
   const el=document.getElementById('task-list');
   if(!list.length){el.innerHTML='<div class="lempty">暂无待处理任务</div>';return;}
-  const um={high:{l:'紧急',cls:'urg-h'},mid:{l:'一般',cls:'urg-m'},low:{l:'普通',cls:'urg-l'}};
   el.innerHTML=list.map(t=>{
-    const u=um[t.urg]||um.low;
     return`<div class="tcard${selTid===t.id?' sel':''}" onclick="selTask('${t.id}')">
       <div class="tcard-body">
         <div class="tcard-top">
           <span class="ttype-b ${t.typeCls}">${t.typeN}</span>
-          <span class="turg ${u.cls}">${u.l}</span>
           ${t.isNew?'<span class="tnew">新</span>':''}
         </div>
         <div class="tcard-title">${t.title}</div>
@@ -704,12 +670,11 @@ function showTaskDetail(t){
   document.getElementById('dp-empty-task').classList.add('hide');
   const dc=document.getElementById('dp-task');
   dc.classList.remove('hide');
-  const u=TURGMAP[t.urg]||TURGMAP.low;
   const dh=(t.data||[]).map(d=>`<div class="dp-cell"><div class="dp-cl">${d.l}</div><div class="dp-cv">${d.v}</div></div>`).join('');
   dc.innerHTML=`
   <div class="dp-scroll">
     <div class="dp-head">
-      <div class="dp-metarow"><span class="ttype-b ${t.typeCls}">${t.typeN}</span><span class="turg ${u.cls}">${u.l}</span></div>
+      <div class="dp-metarow"><span class="ttype-b ${t.typeCls}">${t.typeN}</span></div>
       <div class="dp-title" style="margin-top:7px">${t.title}</div>
       <div class="dp-time">📅 ${t.createTime}&nbsp;·&nbsp;站内信</div>
     </div>
@@ -733,49 +698,34 @@ function showTaskDetail(t){
    SUBSCRIPTION SETTINGS
 ═══════════════════════════ */
 function renderSub(){
-  const FREQS=[{k:'realtime',l:'实时'},{k:'hourly',l:'整点'},{k:'daily',l:'定时'}];
   let h=`
   <div class="sub-head">
     <div class="sub-head-t">消息订阅设置</div>
-    <div class="sub-head-s">管理各类消息的接收开关与提醒频次，所有消息均通过<b>站内信</b>方式推送。</div>
+    <div class="sub-head-s">管理各类消息的接收开关，所有消息均通过<b>站内信</b>方式推送。</div>
   </div>
-  <div class="sub-notice">📬 消息接收方式固定为<b>站内信</b>。可对各子类消息单独开启 / 关闭，并设置推送频次：<b>实时</b>（即时推送）、<b>整点</b>（每小时整点推送）、<b>定时</b>（每日定时推送）。</div>`;
-  SUB.forEach(g=>{
-    h+=`<div class="sub-grp">
-      <div class="sub-grp-head"><span class="sub-grp-ico">${g.ico}</span>${g.group}</div>`;
-    g.items.forEach(it=>{
-      const fb=FREQS.map(f=>`<button class="freq-b${it.freq===f.k?' on':''}${!it.en?' dis':''}" onclick="setFreq('${it.key}','${f.k}',this)">${f.l}</button>`).join('');
-      h+=`<div class="sub-row">
-        <div class="sub-row-info">
-          <div class="sub-row-name">${it.name}</div>
-          <div class="sub-row-desc">${it.desc}</div>
-        </div>
-        <div class="freq-g" id="fg-${it.key}">${fb}</div>
-        <label class="sw" style="margin-left:12px">
-          <input type="checkbox" ${it.en?'checked':''} onchange="toggleSub('${it.key}',this.checked)">
-          <span class="sw-sl"></span>
-        </label>
-      </div>`;
-    });
-    h+='</div>';
+  <div class="sub-notice">📬 消息接收方式固定为<b>站内信</b>。可对各类消息单独开启 / 关闭订阅。</div>`;
+  h+='<div class="sub-grp">';
+  SUB.forEach(it=>{
+    h+=`<div class="sub-row">
+      <span class="sub-grp-ico" style="font-size:15px;flex-shrink:0">${it.ico}</span>
+      <div class="sub-row-info">
+        <div class="sub-row-name">${it.name}</div>
+        <div class="sub-row-desc">${it.desc}</div>
+      </div>
+      <label class="sw" style="margin-left:auto">
+        <input type="checkbox" ${it.en?'checked':''} onchange="toggleSub('${it.key}',this.checked)">
+        <span class="sw-sl"></span>
+      </label>
+    </div>`;
   });
+  h+='</div>';
   h+=`<div class="sub-save-row"><button class="save-btn" onclick="saveSub(this)">保存设置</button></div>`;
   document.getElementById('sub-content').innerHTML=h;
 }
 
 function toggleSub(key,val){
-  SUB.forEach(g=>g.items.forEach(it=>{
-    if(it.key===key){
-      it.en=val;
-      document.getElementById('fg-'+key)?.querySelectorAll('.freq-b').forEach(b=>b.classList.toggle('dis',!val));
-    }
-  }));
-}
-
-function setFreq(key,freq,btn){
-  SUB.forEach(g=>g.items.forEach(it=>{if(it.key===key)it.freq=freq;}));
-  document.getElementById('fg-'+key)?.querySelectorAll('.freq-b').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
+  const it=SUB.find(s=>s.key===key);
+  if(it) it.en=val;
 }
 
 function saveSub(btn){
