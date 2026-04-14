@@ -453,7 +453,7 @@ const TASKS=[
    title:'技术需求单 #RD-2026-0312 等待审批',
    desc:'研究院张明提交PBAT柔性薄膜配方改良技术需求单，涉及预算32万元，需求优先级：高。需负责人在3个工作日内完成审批。',
    submitter:'张明 · 研究院',createTime:'2026-04-08 14:30',urg:'high',deadline:'2026-04-11',isNew:true,
-   targetPage:'信息管理 > 技术需求管理',
+   targetPage:'研发创新 > 技术需求管理',
    data:[{l:'提交部门',v:'研究院'},{l:'提交时间',v:'2026-04-08 14:30'}]},
   {id:'t2',type:'complaint',typeN:'客诉反馈处理',typeCls:'tt-complaint',ico:'📞',
    title:'苏州绿联包装客诉 #CUS-20260331-089 超时未处理',
@@ -558,8 +558,7 @@ function renderMsg(){
 function selMsg(id){
   selMid=id;
   const m=MSGS.find(x=>x.id===id);if(!m)return;
-  m.unread=false;
-  renderMsg();showMsgDetail(m);updateBadges();
+  renderMsg();showMsgDetail(m);
 }
 
 function resetMsgDetail(){
@@ -597,7 +596,7 @@ function removeMsg(id){
 function markRead(id){
   const m=MSGS.find(x=>x.id===id);
   if(m)m.unread=false;
-  renderMsg();updateBadges();
+  selMid=null;resetMsgDetail();renderMsg();updateBadges();
 }
 
 function markAllRead(){
